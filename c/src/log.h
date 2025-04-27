@@ -6,6 +6,17 @@
 extern "C" {
 #endif
 
+#define DEFAULT_LOG_LEVEL LOG_LEVEL_DEBUG
+#ifndef BUILD_RELEASE
+  #include <stdlib.h>
+  #define logVariableLevel() do {\
+    logSetLevel(argc > 1 ? atoi(argv[1]) : DEFAULT_LOG_LEVEL);\
+    logError("Program compiled in debug mode");\
+  } while (0)
+#else
+  #define logVariableLevel()
+#endif
+
 typedef enum {
   LOG_LEVEL_ALLOC = 0,
   LOG_LEVEL_DEBUG,
