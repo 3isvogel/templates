@@ -7,17 +7,17 @@
 # A generic build template for C/C++ programs
 
 # executable name
-EXE = app
+EXE := app
 
 # C compiler
-CC = gcc
+CC := gcc
 # C++ compiler
-CXX = g++
+CXX := g++
 # linker
-LD = gcc
+LD := g++
 
 # C flags
-CFLAGS = -O2 -Wall
+CFLAGS := -O2 -Wall -g
 # Needs -O2 or higher as it optimizes tail recursion
 
 # # Remove all logging except for errors
@@ -31,41 +31,36 @@ CFLAGS = -O2 -Wall
 # CFLAGS += -DLOG_DISABLE_COLOR
 
 # C++ flags
-CXXFLAGS = 
-# C/C++ flags
-CPPFLAGS =
+CXXFLAGS :=
 # dependency-generation flags
-DEPFLAGS = -MMD -MP -Isrc/
+DEPFLAGS := -MMD -MP -Isrc/
 # linker flags
-LDFLAGS =
+LDFLAGS := -g
 # library flags
-LDLIBS =
+LDLIBS :=
 # packages used
-PKG = 
+PKG := glfw3 gl
 # build directories
-BIN = bin
-OBJ = obj
-SRC = src
-SHA = shaders
+BIN := bin
+OBJ := obj
+SRC := src
+SHA := shaders
 # Additional dependencies on which rebuild objects
 # useful when changing stuff in the makefile to rebuild the project with new options
-OBJDEPS = Makefile 
+OBJDEPS := Makefile
 
 ################################################################################
 # Ideally you should not go under this line
 ################################################################################
 
-CFLAGS+=$(shell [ $(PKG) ] && pkg-config --cflags $(PKG))
-CXXFLAGS+=$(shell [ $(PKG) ] && pkg-config --cflags $(PKG))
-LDFLAGS+=$(shell [ $(PKG) ] && pkg-config --libs $(PKG))
+CFLAGS+=$(shell [ "$(PKG)" ] && pkg-config --cflags $(PKG))
+LDFLAGS+=$(shell [ "$(PKG)" ] && pkg-config --libs $(PKG))
 
 SOURCES := $(shell find -E src -iregex '.*\.(c|cc|cpp|cxx)')
 
 OBJECTS := \
 	$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(shell find $(SRC) -name "*.c")) \
-	$(patsubst $(SRC)/%.cc, $(OBJ)/%.o, $(shell find $(SRC) -name "*.cc")) \
-	$(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(shell find $(SRC) -name "*.cpp")) \
-	$(patsubst $(SRC)/%.cxx, $(OBJ)/%.o, $(shell find $(SRC) -name "*.cxx"))
+	$(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(shell find $(SRC) -name "*.cpp"))
 
 SHADERS := \
 	$(patsubst $(SHA)/%.frag, $(SHA)/%Frag.spv, $(wildcard $(SHA)/*.frag)) \
@@ -75,9 +70,9 @@ SHADERS := \
 DEPENDS := $(OBJECTS:.o=.d)
 
 # compile C source
-COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) -c -o $@
+COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@
 # compile C++ source
-COMPILE.cxx = $(CXX) $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c -o $@
+COMPILE.cxx = $(CXX) $(DEPFLAGS) $(CFLAGS)$(CXXFLAGS) -c -o $@
 # link objects
 LINK.o = $(LD) $(LDFLAGS) $(LDLIBS) $(OBJECTS) -o $@
 # shaders creation
