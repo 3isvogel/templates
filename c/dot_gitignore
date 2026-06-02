@@ -1,2 +1,5 @@
+.cache/
 obj/
 bin/
+compile_commands.json
+.DS_Store
