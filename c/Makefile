@@ -39,7 +39,7 @@ LDFLAGS := -g
 # library flags
 LDLIBS :=
 # packages used
-PKG := glfw3 gl
+PKG :=
 # build directories
 BIN := bin
 OBJ := obj
