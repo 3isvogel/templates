@@ -239,7 +239,7 @@ int lru_destroy(Lru lru)
         if (page->flags & FLAG_ALLOC) {
             if (page->flags & FLAG_VALID)
                 // Store valid pages
-                if(lru->f_load_page(page->data, page->id) < 0) return 0;
+                if(lru->f_store_page(page->data, page->id) < 0) return 0;
             // Free allocated pages
             free(lru->pages[i].data);
         }
