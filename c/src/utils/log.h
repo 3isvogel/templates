@@ -62,24 +62,24 @@ void logPrintVa(LogLevel logLevel, const char *fileName, int lineNumber,
 
 #ifndef BUILD_RELEASE
 
-#define logAlloc(fmt, ...) logPrintF(LOG_LEVEL_ALLOC, __FILE__, __LINE__, fmt, __VA_ARGS__)
-#define logDebug(fmt, ...) logPrintF(LOG_LEVEL_DEBUG, __FILE__, __LINE__, fmt, __VA_ARGS__)
-#define logInfo(fmt, ...) logPrintF(LOG_LEVEL_INFO, __FILE__, __LINE__, fmt, __VA_ARGS__)
-#define logWarning(fmt, ...) logPrintF(LOG_LEVEL_WARN, __FILE__, __LINE__, fmt, __VA_ARGS__)
-#define logError(fmt, ...) logPrintF(LOG_LEVEL_ERROR, __FILE__, __LINE__, fmt, __VA_ARGS__)
+#define logAlloc( ...) logPrintF(LOG_LEVEL_ALLOC, __FILE__, __LINE__,  __VA_ARGS__)
+#define logDebug( ...) logPrintF(LOG_LEVEL_DEBUG, __FILE__, __LINE__,  __VA_ARGS__)
+#define logInfo( ...) logPrintF(LOG_LEVEL_INFO, __FILE__, __LINE__,  __VA_ARGS__)
+#define logWarning( ...) logPrintF(LOG_LEVEL_WARN, __FILE__, __LINE__,  __VA_ARGS__)
+#define logError( ...) logPrintF(LOG_LEVEL_ERROR, __FILE__, __LINE__,  __VA_ARGS__)
 
 #else//BUILD_RELEASE
 
-#define logAlloc(fmt, ...)
-#define logDebug(fmt, ...)
-#define logInfo(fmt, ...)
-#define logWarning(fmt, ...)
-#define logError(fmt, ...)
+#define logAlloc( ...)
+#define logDebug( ...)
+#define logInfo( ...)
+#define logWarning( ...)
+#define logError( ...)
 
 #ifdef  logError
 #undef  logError
 #endif
-#define logError(fmt, ...) logPrint(LOG_LEVEL_ERROR, __FILE__, __LINE__, fmt, __VA_ARGS__);
+#define logError( ...) logPrint(LOG_LEVEL_ERROR, __FILE__, __LINE__,  __VA_ARGS__);
 
 #endif // BUILD_RELEASE
 
