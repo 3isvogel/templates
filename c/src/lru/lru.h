@@ -32,10 +32,10 @@ int lru_destroy(Lru lru);
 /**
  * @brief Loads content of page `index` into dest
  *
- * @param dest destination buffer for the page content (assumes page_size)
+ * @param lru lru reference
  * @param id unique page id (passed to f_load_page and f_store_page)
- * @return positive on success, 0 otherwise
+ * @return address of page on success, NULL otherwise
  */
-int lru_get_page(Lru lru, void* dest, uint id);
+void* lru_get_page(Lru lru, uint id);
 
 #endif // SRC_LRU_LRU_H

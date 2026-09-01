@@ -133,7 +133,7 @@ Lru lru_init(uint entries, uint page_size, PageAcces f_load_page, PageAcces f_st
     return lru;
 }
 
-int lru_get_page(Lru lru, void* dest, uint id)
+void* lru_get_page(Lru lru, uint id)
 {
     int need_load = 1;
     // TODO: add a second candidate (the page to evict if exixts) and use that instead
@@ -203,7 +203,7 @@ int lru_get_page(Lru lru, void* dest, uint id)
             // Assume at least one node in the list, cannot evict fictitious node
             assert(t_page != &lru->list);
             // Store page, if fails I cannot load new page
-            if(lru->f_store_page(t_page->data, t_page->id) < 0) return 0;
+            if(lru->f_store_page(t_page->data, t_page->id) < 0) return NULL;
             // Remove first page 
             t_page->prev->next = t_page->next;
             t_page->next->prev = t_page->prev;
@@ -220,16 +220,14 @@ int lru_get_page(Lru lru, void* dest, uint id)
         // Set new page id
         t_page->id = id;
         // Loading from disk fails, cannot continue
-        if(lru->f_load_page(t_page->data, t_page->id) < 0) return 0;
+        if(lru->f_load_page(t_page->data, t_page->id) < 0) return NULL;
         t_page->flags |= FLAG_VALID;
     }
     t_page->next = &(lru->list);
     t_page->prev = lru->list.prev;
     t_page->next->prev = t_page;
     t_page->prev->next = t_page;
-    // Actually copy the memory
-    memcpy(dest, t_page->data, lru->page_size);
-    return 1;
+    return t_page->data;
 }
 
 int lru_destroy(Lru lru)
