@@ -1,5 +1,4 @@
-#ifndef SRC_LRU_LRU_H
-#define SRC_LRU_LRU_H
+#pragma once
 
 // Move to <utils/utils.h>
 #include <utils/types.h>
@@ -37,5 +36,3 @@ int lru_destroy(Lru lru);
  * @return address of page on success, NULL otherwise
  */
 void* lru_get_page(Lru lru, uint id);
-
-#endif // SRC_LRU_LRU_H
