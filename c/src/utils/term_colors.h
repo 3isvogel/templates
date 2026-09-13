@@ -1,5 +1,4 @@
-#ifndef SRC_UTILS_TERM_COLORS_H
-#define SRC_UTILS_TERM_COLORS_H
+#pragma once
 
 #include "macros.h"
 
@@ -31,5 +30,3 @@
 #define TERM_CODE_SET2(code1, code2)            "\x1b[" code1 ";" code2 "m"
 #define TERM_CODE_SET3(code1, code2, code3)     "\x1b[" code1 ";" code2 ";" code3 "m"
 #define TERM_CODE_RESET                         TERM_CODE_SET(TERM_CODE_DEFAULT)
-
-#endif // SRC_UTILS_TERM_COLORS_H
