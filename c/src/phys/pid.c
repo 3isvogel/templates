@@ -41,17 +41,9 @@ void pid_compute(PidControl pid, double dt)
 
     // x_ref(t) - y(t)
     const double e = r - y;
-    #if PID_INTEGRATION == PID_INTEGRATION_EULER
     // Euler integration
     // y(n) = y(n-1) + dt * u(t)
     pid->acc += dt * e;
-    #elif PID_INTEGRATION == PID_INTEGRATION_TRAP
-    // Trapezoidal integration
-    // y(n) = y(n-1) + dt * [u(n) + u(n-1)]/2
-    pid->acc += dt * (e + prev)/2;
-    #else
-    #error "Unknown value for PID_INTEGRATION, select one from PID_INTEGRATION_*"
-    #endif
 
     const double p = e,
                  i = pid->acc,

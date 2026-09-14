@@ -6,11 +6,6 @@ typedef PIDControl* PidControl;
 #define PID_INTEGRATION_EULER   1
 #define PID_INTEGRATION_TRAP    2
 
-// If not specified, use Euler integration
-#ifndef PID_INTEGRATION
-#define PID_INTEGRATION PID_INTEGRATION_EULER
-#endif
-
 // If not specified, do not enable anti-windup
 // NOTE to tune PID enable anti-windup, once tuned disable it, as it causes minor
 // error on the I component
