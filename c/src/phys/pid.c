@@ -5,9 +5,11 @@ struct PIDControl {
     double K_p, K_i, K_d;
     double *r, *y, *u;
     double prev, acc;
+    double min, max;
 };
 
 PidControl pid_init(double K_p, double K_i, double K_d,
+        double min, double max,
         double* r, double* y, double *u)
 {
     PidControl pid = (PidControl)malloc(sizeof(PIDControl));
@@ -17,6 +19,8 @@ PidControl pid_init(double K_p, double K_i, double K_d,
         .r  = r,
         .y  = y,
         .u  = u,
+        .min = min,
+        .max = max,
     };
     return pid;
 }
@@ -31,6 +35,8 @@ void pid_compute(PidControl pid, double dt)
 {
     const double    r       = DEREF(pid->r),
                     y       = DEREF(pid->y),
+                    min     = pid->min,
+                    max     = pid->max,
                     prev    = pid->prev;
 
     // x_ref(t) - y(t)
@@ -53,5 +59,19 @@ void pid_compute(PidControl pid, double dt)
     // Update derivator
     pid->prev = e;
 
-    *pid->u = pid->K_p * p + pid->K_i * i + pid->K_d * d;
+    const double u = pid->K_p * p + pid->K_i * i + pid->K_d * d;
+
+    if (u < min) {
+        *pid->u = min;
+        #if PID_INTEGRATION_ANTI_WINDUP != 0
+        pid->acc = 0;
+        #endif
+    } else if (u > max) {
+        *pid->u = max;
+        #if PID_INTEGRATION_ANTI_WINDUP != 0
+        pid->acc = 0;
+        #endif
+    } else {
+        *pid->u = u;
+    }
 }
